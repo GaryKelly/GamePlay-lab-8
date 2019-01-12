@@ -3,13 +3,14 @@
 #include <SFML/OpenGL.hpp>
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include "MyMatrix3.h"
+#include "MyVector3.h"
 
-#include <Vector3.h>
-#include <Matrix3.h>
+
 
 using namespace std;
 using namespace sf;
-using namespace gpp;
+
 
 class Game
 {
@@ -33,10 +34,19 @@ private:
 	float colors[24] = { 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f,1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f };
 
 	// Index to be drawn
-	unsigned int vertex_index[24] = { 0, 1, 2, 1 , 2, 3,
+	unsigned int vertex_index[36] = { 0, 1, 2, 1 , 2, 3,
 									  4, 5, 6, 5, 6, 7,
 									  0, 4, 2, 2, 4, 6,
-									  1, 5, 3, 3, 5, 7};
+									  1, 5, 3, 3, 5, 7,
+									  0, 1, 4, 1, 4, 5,
+									  1, 5, 7, 1, 7, 3};
+	MyVector3 m_points[8];
+	MyVector3 m_emptyVect{ 0,0,0 };
+	MyMatrix3 m_matrices[3];
+	MyMatrix3 m_rot;
+	MyMatrix3 m_scale{ 1,1,1,1,1,1,1,1,1 };
+	MyMatrix3 m_tran{};
+	
 	Window window;
 	bool isRunning = false;
 	void initialize();
@@ -46,6 +56,11 @@ private:
 
 	Clock clock;
 	Time elapsed;
+	void rotate();
+	void translate();
+	void scale();
+	void applyChanges();
+
 
 	float rotationAngle = 0.0f;
 };
