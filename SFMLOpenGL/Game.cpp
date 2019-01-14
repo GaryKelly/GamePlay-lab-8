@@ -9,9 +9,7 @@ Game::Game() : window(VideoMode(800, 600), "OpenGL Cube")
 	{
 		m_points[i] = MyVector3(vertices[(3 * i)], vertices[1 + (3 * i)], vertices[2 + (3 * i)]);
 	}
-	m_matrices[0] = MyMatrix3(m_points[0], m_points[1], m_points[2]);
-	m_matrices[1] = MyMatrix3(m_points[3], m_points[4], m_points[5]);
-	m_matrices[2] = MyMatrix3(m_points[6], m_points[7], m_emptyVect);
+	cout << "done";
 }
 
 Game::~Game() {}
@@ -28,7 +26,7 @@ void Game::run()
 
 	while (isRunning) {
 
-		//cout << "Game running..." << endl;
+		cout << "Game running..." << endl;
 
 		while (window.pollEvent(event))
 		{
@@ -61,12 +59,15 @@ void Game::update()
 	translate();
 	scale();
 	applyChanges();
-	//cout << "Update up" << endl;
+	cout << "Update up" << endl;
 }
 
 void Game::render()
 {
-	//cout << "Drawing" << endl;
+	cout << "Drawing" << endl;
+	glClearColor(0, 0, 0, 1);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
@@ -89,103 +90,132 @@ void Game::render()
 
 void Game::unload()
 {
-	//cout << "Cleaning up" << endl;
+	cout << "Cleaning up" << endl;
 }
 
 void Game::rotate()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
 	{
-		for (int i = 0; i < 3; i++)
+		m_rot = m_rot.rotationX(0.0005);
+		for(int i = 0; i < 8; i++ )
 		{
-			m_rot = m_rot.rotationX(0.5);
+			m_points[i] = m_rot * m_points[i];
 		}
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Y))
 	{
-		for (int i = 0; i < 3; i++)
+		
+		m_rot = m_rot.rotationY(0.0005);
+		for (int i = 0; i < 8; i++)
 		{
-			m_rot = m_rot.rotationY(0.5);
+			m_points[i] = m_rot * m_points[i];
 		}
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
 	{
-		for (int i = 0; i < 3; i++)
+		m_rot = m_rot.rotationZ(0.0005);
+		for (int i = 0; i < 8; i++)
 		{
-			m_rot = m_rot.rotationZ(0.5);
+			m_points[i] = m_rot * m_points[i];
 		}
 	}
-	else
-	{
-		m_rot = MyMatrix3();
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		m_matrices[i]=m_matrices[i].operator*(m_rot);
-	}
+
+
+
 }
 
 void Game::translate()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		m_tran = m_tran.transalteY(1);
-		for (int i = 0; i < 3; i++)
+		m_tran = m_tran.transalteY(.001);
+		for (int i = 0; i < 8; i++)
 		{
-			m_matrices[i] = m_matrices->operator+(m_tran);
+			m_points[i] = m_tran.row(1) + m_points[i];
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		m_tran = m_tran.transalteY(-1);
-		for (int i = 0; i < 3; i++)
+		m_tran = m_tran.transalteY(-.001);
+		for (int i = 0; i < 8; i++)
 		{
-			m_matrices[i] = m_matrices->operator+(m_tran);
+			m_points[i] = m_tran.row(1) + m_points[i];
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		m_tran = m_tran.translateX(-1);
-		for (int i = 0; i < 3; i++)
+		m_tran = m_tran.translateX(-.001);
+		for (int i = 0; i < 8; i++)
 		{
-			m_matrices[i] = m_matrices->operator+(m_tran);
+			m_points[i] = m_tran.row(0) + m_points[i];
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		m_tran = m_tran.translateX(1);
-		for (int i = 0; i < 3; i++)
+		m_tran = m_tran.translateX(.001);
+		for (int i = 0; i < 8; i++)
 		{
-			m_matrices[i] = m_matrices->operator+(m_tran);
+			m_points[i] = m_tran.row(0) + m_points[i];
 		}
 	}
 }
 
 void Game::scale()
 {
+	cout << "Scaling\n";
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Dash))
 	{
-		m_scale = m_scale.scale(-1.5);
+		
+		for (int i = 0; i < 8; i++)
+		{
+
+			m_points[i] = MyMatrix3::scale(0.999) * m_points[i];
+		}
+		
+
+		
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Equal))
 	{
-		m_scale = m_scale.scale(1.5);
+		
+		for (int i = 0; i < 8; i++)
+		{
+			m_points[i] = MyMatrix3::scale(1.001) * m_points[i];
+		}
 	}
-	else
-	{
-		m_scale = MyMatrix3(1, 1, 1, 1, 1, 1, 1, 1, 1);
-	}
-	for (int i = 0; i < 3; i++)
-	{
-		m_matrices[i] = m_matrices->operator+(m_scale);
-	}
+
+	
 }
 
 void Game::applyChanges()
 {
-	m_points[7] = m_matrices[3].row(0);
-	m_points[8] = m_matrices[3].row(1);
-
 	
+
+
+	vertices[0] = m_points[0].getX();
+	vertices[1] = m_points[0].getY();
+	vertices[2] = m_points[0].getZ();
+	vertices[3] = m_points[1].getX();
+	vertices[4] = m_points[1].getY();
+	vertices[5] = m_points[1].getZ();
+	vertices[6] = m_points[2].getX();
+	vertices[7] = m_points[2].getY();
+	vertices[8] = m_points[2].getZ();
+	vertices[9] = m_points[3].getX();
+	vertices[10] = m_points[3].getY();
+	vertices[11] = m_points[3].getZ();
+	vertices[12] = m_points[4].getX();
+	vertices[13] = m_points[4].getY();
+	vertices[14] = m_points[4].getZ();
+	vertices[15] = m_points[5].getX();
+	vertices[16] = m_points[5].getY();
+	vertices[17] = m_points[5].getZ();
+	vertices[18] = m_points[6].getX();
+	vertices[19] = m_points[6].getY();
+	vertices[20] = m_points[6].getZ();
+	vertices[21] = m_points[7].getX();
+	vertices[22] = m_points[7].getY();
+	vertices[23] = m_points[7].getZ();
 }
 

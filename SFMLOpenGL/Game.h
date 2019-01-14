@@ -44,8 +44,8 @@ private:
 	MyVector3 m_emptyVect{ 0,0,0 };
 	MyMatrix3 m_matrices[3];
 	MyMatrix3 m_rot;
-	MyMatrix3 m_scale{ 1,1,1,1,1,1,1,1,1 };
-	MyMatrix3 m_tran{};
+	MyMatrix3 m_scale;
+	MyMatrix3 m_tran;
 	
 	Window window;
 	bool isRunning = false;
@@ -53,7 +53,7 @@ private:
 	void update();
 	void render();
 	void unload();
-
+	int m_pauseTime = 0;
 	Clock clock;
 	Time elapsed;
 	void rotate();

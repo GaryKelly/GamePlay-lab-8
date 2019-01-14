@@ -396,9 +396,9 @@ MyMatrix3 MyMatrix3::rotationZ(const double t_angleRadians)
 /// <returns></returns>
 MyMatrix3 MyMatrix3::rotationY(const double t_angleRadians)
 {
-	MyMatrix3 rotateY = { cos(t_angleRadians), 0, -sin(t_angleRadians),
+	MyMatrix3 rotateY = { cos(t_angleRadians), 0, sin(t_angleRadians),
 						  0,1,0,
-						  sin(t_angleRadians), 0, cos(t_angleRadians) };
+						  -sin(t_angleRadians), 0, cos(t_angleRadians) };
 	return rotateY;
 }
 
@@ -431,12 +431,12 @@ MyMatrix3 MyMatrix3::translation(const MyVector3 t_displacement)
 
 MyMatrix3 MyMatrix3::transalteY(float t_val)
 {
-	return MyMatrix3(1,0,0,0,1,0,0,t_val,0);
+	return MyMatrix3(1,0,0,0,t_val,0,0,0,0);
 }
 
 MyMatrix3 MyMatrix3::translateX(float t_val)
 {
-	return MyMatrix3(1, 0, 0, 0, 1, 0, t_val, 0, 0);
+	return MyMatrix3(t_val,0, 0 , 0, 1, 0, 0, 0, 0);
 }
 
 
@@ -449,7 +449,7 @@ MyMatrix3 MyMatrix3::scale(const double t_scalingfactor)
 {
 	MyMatrix3 scaleMatrix{ t_scalingfactor, 0, 0, //row 1
 						  0, t_scalingfactor, 0,  //row 2
-						  0, 0, 1 }; //row 3
+						  0, 0, t_scalingfactor }; //row 3
 	return scaleMatrix;
 }
 
