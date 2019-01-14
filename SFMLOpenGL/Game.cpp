@@ -129,7 +129,7 @@ void Game::translate()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
-		m_tran = m_tran.transalteY(.001);
+		m_tran = m_tran.transalteY(.01);
 		for (int i = 0; i < 8; i++)
 		{
 			m_points[i] = m_tran.row(1) + m_points[i];
@@ -137,7 +137,7 @@ void Game::translate()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
-		m_tran = m_tran.transalteY(-.001);
+		m_tran = m_tran.transalteY(-.01);
 		for (int i = 0; i < 8; i++)
 		{
 			m_points[i] = m_tran.row(1) + m_points[i];
@@ -145,7 +145,7 @@ void Game::translate()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		m_tran = m_tran.translateX(-.001);
+		m_tran = m_tran.translateX(-.01);
 		for (int i = 0; i < 8; i++)
 		{
 			m_points[i] = m_tran.row(0) + m_points[i];
@@ -153,7 +153,7 @@ void Game::translate()
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
-		m_tran = m_tran.translateX(.001);
+		m_tran = m_tran.translateX(.01);
 		for (int i = 0; i < 8; i++)
 		{
 			m_points[i] = m_tran.row(0) + m_points[i];
